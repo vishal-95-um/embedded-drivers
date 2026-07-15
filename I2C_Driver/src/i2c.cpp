@@ -10,21 +10,25 @@ void i2c_init() {
 }
 
 void i2c_start() {
-
+    
+    // make sure bus is idle
     gpio_release(sda_pin);
     gpio_release(scl_pin);
     delayMicroseconds(i2c_delay_us);
 
+    // start condition (SDA = LOW, SCL = HIGH)
     gpio_pull_low(sda_pin);
     delayMicroseconds(i2c_delay_us);
-
+    
+    // SCL = LOW so data transfer can happen after this (SDA only allowed to change when SCL is HIGH)
     gpio_pull_low(scl_pin);
     delayMicroseconds(i2c_delay_us);
 
 }
 
 void i2c_write_bit(bool bit) {
-
+    
+    // write on sda line
     if(bit) {
         gpio_release(sda_pin);
     } else {
@@ -32,12 +36,14 @@ void i2c_write_bit(bool bit) {
     }
 
     delayMicroseconds(i2c_delay_us);
-
+    
+    // SCL = HIGH so slave can read it
     gpio_release(scl_pin);
     delayMicroseconds(i2c_delay_us);
 
     // reading by slave happens here (when scl is high)
-
+    
+    // SCL = LOW so after this data transaction can happen 
     gpio_pull_low(scl_pin);
     delayMicroseconds(i2c_delay_us);
 
@@ -47,12 +53,14 @@ bool i2c_read_bit() {
     // let slave control sda
     gpio_release(sda_pin);
     delayMicroseconds(i2c_delay_us);
-
+   
+    // raise SCL so master can read
     gpio_release(scl_pin);
     delayMicroseconds(i2c_delay_us);
 
     bool bit = gpio_read(sda_pin);
-
+    
+    // SCL = LOW so after this data transaction can happen 
     gpio_pull_low(scl_pin);
     delayMicroseconds(i2c_delay_us);
     
@@ -60,7 +68,7 @@ bool i2c_read_bit() {
 }
 
 bool i2c_get_ack() {
-    return !i2c_read_bit();
+    return !i2c_read_bit(); // read bit from slave for ACK , NOT so ACK(0) can be converted to True
 }
 
 
