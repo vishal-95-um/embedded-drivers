@@ -5,7 +5,7 @@
 
 void i2c_init() {
 
-    gpio_init();
+    gpio_driver_init();
 
 }
 

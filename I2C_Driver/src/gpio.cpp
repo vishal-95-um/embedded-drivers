@@ -2,7 +2,7 @@
 #include "config.h"
 #include <Arduino.h>
 
-void gpio_init() {
+void gpio_driver_init() {
 
  pinMode(sda_pin, OUTPUT_OPEN_DRAIN);
  pinMode(scl_pin, OUTPUT_OPEN_DRAIN);
