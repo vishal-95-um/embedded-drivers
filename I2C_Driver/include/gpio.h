@@ -2,7 +2,7 @@
 
 #include <stdint.h>
 
-void gpio_init();
+void gpio_init(); 
 
 void gpio_release(uint8_t pin);
 
