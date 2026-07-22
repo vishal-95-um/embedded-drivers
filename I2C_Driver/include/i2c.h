@@ -1,5 +1,6 @@
 #pragma once
 
+#include <Arduino.h>
 #include <stdint.h>
 
 void i2c_init(); // initialize i2c = same as gpio_driver_init() -> just for visibility
@@ -16,4 +17,4 @@ uint8_t i2c_read_byte(bool ack);
 void i2c_send_ack(); // Send ACK to Slave (Write 0 on SDA Line)
 void i2c_send_nack(); // Send NACK to Slave (Write 1 on SDA Line)
 
-void i2c_stop(); 
+void i2c_stop();
