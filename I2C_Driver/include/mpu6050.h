@@ -41,20 +41,7 @@ bool mpu6050_write_register(uint8_t reg, uint8_t data);
 #define MPU6050_GYRO_ZOUT_H  0x47
 #define MPU6050_GYRO_ZOUT_L  0x48
 
-typedef struct {
-    int16_t accel_x;
-    int16_t accel_y;
-    int16_t accel_z;
-
-    int16_t temperature;
-
-    int16_t gyro_x;
-    int16_t gyro_y;
-    int16_t gyro_z;
-} mpu6050_raw_data_t;
-
-
 bool mpu6050_read_bytes(uint8_t start_register, uint8_t *buffer, uint8_t no_of_bytes);
-bool mpu6050_read_raw_data(mpu6050_raw_data_t *data);
+bool mpu6050_read_raw_accelration(int16_t *ax, int16_t *ay, int16_t *az);
 
 

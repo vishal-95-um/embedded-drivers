@@ -1,18 +1,18 @@
 #include <Arduino.h>
+#include "mpu6050.h"
 
-// put function declarations here:
-int myFunction(int, int);
 
 void setup() {
-  // put your setup code here, to run once:
-  int result = myFunction(2, 3);
+  
 }
 
 void loop() {
-  // put your main code here, to run repeatedly:
+  int16_t ax, ay, az;
+
+  if(mpu6050_read_raw_accelration(&ax, &ay, &az)) {
+    printf("AX = %d\n", ax);
+    printf("AY = %d\n", ay);
+    printf("AZ = %d\n", az);
+  }
 }
 
-// put function definitions here:
-int myFunction(int x, int y) {
-  return x + y;
-}

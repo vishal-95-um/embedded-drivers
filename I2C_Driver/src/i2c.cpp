@@ -109,7 +109,7 @@ void i2c_send_nack() {
 
 
 void i2c_stop() {
-    // STOP condition = SDA = LOW to HIGH while SCL is HIGH
+    // STOP condition ==> SDA = LOW to HIGH while SCL is HIGH
     
     gpio_pull_low(sda_pin);
     delayMicroseconds(i2c_delay_us);

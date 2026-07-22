@@ -78,7 +78,7 @@ bool mpu6050_read_bytes(uint8_t starting_regiser, uint8_t *buffer, uint8_t no_of
 
     i2c_start();
 
-    if(!i2c_write_byte(MPU6050_ADDRESS << 1) | 0) {
+    if(!i2c_write_byte((MPU6050_ADDRESS << 1) | 0)) {
       i2c_stop();
       return false;
     }
@@ -101,4 +101,23 @@ bool mpu6050_read_bytes(uint8_t starting_regiser, uint8_t *buffer, uint8_t no_of
 
         buffer[i] = i2c_read_byte(ack);
     }
+
+    i2c_stop();
+
+    return true;
+}
+
+bool mpu6050_read_raw_accelration(int16_t *ax, int16_t *ay, int16_t *az) {
+    
+    uint8_t buffer[6];
+
+    if(!mpu6050_read_bytes(MPU6050_ACCEL_XOUT_H, buffer, 6)) {
+        return false;
+    }
+
+    *ax = (int16_t)((buffer[0] << 8) | buffer[1]);
+    *ay = (int16_t)((buffer[2] << 8) | buffer[3]);
+    *az = (int16_t)((buffer[4] << 8) | buffer[5]);
+
+    return true;
 }
