@@ -122,3 +122,121 @@ void i2c_stop() {
 
 }
 
+bool i2c_write_register(uint8_t slave_addr, uint8_t reg, uint8_t data) {
+
+    i2c_start();
+    
+    if(!i2c_write_byte((slave_addr << 1) | 0)) {
+       goto error;
+    }
+
+    if(!i2c_write_byte(reg)) {
+        goto error;
+    }
+
+    if(!i2c_write_byte(data)) {
+        goto error;
+    }
+    
+    i2c_stop();
+    return true;
+    
+error:
+    i2c_stop();
+    return false;
+
+}
+
+bool i2c_read_register(uint8_t slave_addr, uint8_t reg, uint8_t *data) {
+    
+    i2c_start();
+
+    if(!i2c_write_byte((slave_addr<<1) | 0)) {
+        goto error;
+    }
+
+    if(!i2c_write_byte(reg)) {
+        goto error;
+    }
+
+    i2c_start();
+
+    if(!i2c_write_byte((slave_addr<<1) | 1)) {
+        goto error;
+    }
+
+    *data = i2c_read_byte(false);
+
+    i2c_stop();
+
+    return true;
+
+error:
+    i2c_stop();
+    return false;
+    
+}
+
+bool i2c_write_registers(uint8_t slave_addr, uint8_t reg, const uint8_t *buffer, uint8_t len) {
+
+    if (len == 0)
+    return false;
+
+    i2c_start();
+
+    if(!i2c_write_byte((slave_addr << 1) | 0)){
+        goto error;
+    }
+
+    if(!i2c_write_byte(reg)) {
+        goto error;
+    }
+
+    for(uint8_t i = 0; i<len; i++) {
+        if(!i2c_write_byte(buffer[i])){
+            goto error;
+        };
+    }
+
+    i2c_stop();
+    return true;
+
+    error:
+      i2c_stop();
+      return false;
+}
+
+bool i2c_read_registers(uint8_t slave_addr, uint8_t reg, uint8_t *buffer, uint8_t len) {
+
+    if (len == 0)
+    return false;
+
+    i2c_start();
+
+    if(!i2c_write_byte((slave_addr << 1) | 0)){
+        goto error;
+    }
+
+    if(!i2c_write_byte(reg)) {
+        goto error;
+    }
+
+    i2c_start();
+
+    if(!i2c_write_byte((slave_addr << 1) | 1)){
+        goto error;
+    }
+
+    for(uint8_t i = 0; i<len; i++) {
+        bool ack = i < (len - 1);
+        buffer[i] = i2c_read_byte(ack);
+    }
+    
+    i2c_stop();
+    return true;
+
+    error:
+      i2c_stop();
+      return false;
+
+}
